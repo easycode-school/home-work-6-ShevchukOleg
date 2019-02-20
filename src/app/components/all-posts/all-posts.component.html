@@ -1,16 +1,5 @@
-<div class="container" *ngFor='let post of posts' [attr.data-post_id]="post.id">
-  <div class="row">
-    <div class="col-10">
-      <h3>{{post.title}}</h3>
-    </div>
-    <div class="col-2">
-      <i class="fas fa-trash mx-2" (click)="deletePost($event)"></i>
-      <i class="fas fa-edit" (click)="editPost($event)"></i>
-    </div>
-    <div class="row">
-      <p>{{post.body}}</p>
-    </div>
-  </div>
-</div>
-
+<ng-container *ngFor="let singlePost of posts">
+  <app-single-post [post]="singlePost">
+  </app-single-post>
+</ng-container>
 

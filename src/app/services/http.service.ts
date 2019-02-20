@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class HttpService {
+export class ServerInteractionService {
   private apiUrl: string = environment.apiUrl;
   private httpOptions = {
     headers: new HttpHeaders({
@@ -26,6 +26,7 @@ export class HttpService {
   }
 
   public deletePost(post: Post) {
+    console.log(`Видаляю пост №${post.id}`)
     return this.http.delete(`${this.apiUrl}/posts/${post.id}`, this.httpOptions).pipe(
       retry(3)
     );

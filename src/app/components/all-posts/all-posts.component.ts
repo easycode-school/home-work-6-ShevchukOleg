@@ -1,20 +1,25 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpService } from '../../services/http.service';
+import { Component, OnInit, AfterViewChecked } from '@angular/core';
+import { ServerInteractionService } from '../../services/http.service';
 import { Post } from '../../interfaces/postInterface';
-import { MainFormComponent } from '../main-form/main-form.component';
+import { EditingService } from '../../services/editing.service';
+// import { MainFormComponent } from '../main-form/main-form.component';
 
 @Component({
   selector: 'app-all-posts',
   templateUrl: './all-posts.component.html',
   styleUrls: ['./all-posts.component.css']
 })
-export class AllPostsComponent implements OnInit {
+
+export class AllPostsComponent implements OnInit, AfterViewChecked {
   public posts: Post[];
 
   constructor(
-    public http: HttpService
+    private http: ServerInteractionService,
+    public applicationData: EditingService
   ) { }
-
+  /**
+  * при завантажені компонети отримуються данні від серверу, та записуються в this.posts
+  */
   ngOnInit() {
     this.http.getPost().subscribe (
         (data: Post[]) => {
@@ -24,25 +29,21 @@ export class AllPostsComponent implements OnInit {
       );
   }
 
-  getPosts() {
-    return this.posts;
-  }
+  ngAfterViewChecked() {
+    this.applicationData.postDeleteObservableSubject.subscribe((post: Post) => {
+      console.log(`Отримано наказ видалити з розмітки пост ${post}`);
+      this.posts = this.posts.filter((item) => {
+        return item.id !== post.id;
+      });
+    });
+}
 
-  deletePost(event) {
-    const postId: number = +event.target.closest('.container').dataset.post_id;
-    const deletedPost = this.posts.filter((post: Post) => {
-      return post.id === postId;
-      }
-    )[0];
-    this.http.deletePost(deletedPost).subscribe(
-      (data: []) => {
-        this.posts = this.posts.filter((post: Post) => {
-          return post.id !== postId;
-          }
-        );
-        console.log('Deleted post:', postId);
-      }
-    );
+
+  /**
+   * -метод отримання постів
+   */
+  get allPosts() {
+    return this.posts;
   }
 
   addNewPost(post: Post) {
@@ -50,10 +51,4 @@ export class AllPostsComponent implements OnInit {
     this.posts.push(post);
   }
 
-  editPost(event) {
-    const postId: number = +event.target.closest('.container').dataset.post_id;
-    const requiredPost = this.posts.filter((post) => post.id === postId);
-    console.log(requiredPost);
-    return requiredPost;
-  }
 }

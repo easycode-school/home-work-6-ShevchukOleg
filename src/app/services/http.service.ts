@@ -18,21 +18,49 @@ export class ServerInteractionService {
   constructor(
     private http: HttpClient
   ) { }
-
+    /**
+     * getPost - метод запиту на отримання постів
+     */
   public getPost() {
+    console.log('Роблю запит на отримання всіх постів.');
     return this.http.get(`${this.apiUrl}/posts`).pipe(
       retry(3),
     );
   }
 
-  public deletePost(post: Post) {
-    console.log(`Видаляю пост №${post.id}`)
-    return this.http.delete(`${this.apiUrl}/posts/${post.id}`, this.httpOptions).pipe(
+  /**
+   * deletePost - метод запиту на видалення посту
+   * @param postId - ідентифікатор посту на видалення
+   */
+  public deletePost(postId: number) {
+    console.log(`Видаляю пост №${postId}`);
+    return this.http.delete(`${this.apiUrl}/posts/${postId}`, this.httpOptions).pipe(
       retry(3)
     );
   }
-  // Не впливає на завантаження
-  public sendNewPost(post: Post) {
+
+  /**
+   * sendNewPost - метод відправки на сервер нового посту
+   * @param newPost - новий пост
+   */
+  public sendNewPost(newPost: Post) {
+    return this.http.post(`${this.apiUrl}/posts`, newPost, this.httpOptions);
+  }
+
+  /**
+   * editPost - метод відправки на сервер посту що редагується
+   * @param post - пост, що редагується
+   */
+  public editPost(post: Post) {
     return this.http.post(`${this.apiUrl}/posts`, post, this.httpOptions);
+  }
+
+  /**
+   * getAllComents - метод запиту на отримання усіх коментарів
+   */
+  public getAllComents() {
+    return this.http.get(`${this.apiUrl}/posts/1/comments`).pipe(
+      retry(3),
+    );
   }
 }

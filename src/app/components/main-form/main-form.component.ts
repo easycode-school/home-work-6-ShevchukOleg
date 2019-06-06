@@ -14,7 +14,7 @@ export class MainFormComponent implements OnInit {
   /**
    * -передаємо шаблонну змінну форми у компоненту
    */
-  @ViewChild('mainForm') form: NgForm;
+  @ViewChild('mainForm', { static: true }) form: NgForm;
 
   /**
    * пост що редагується

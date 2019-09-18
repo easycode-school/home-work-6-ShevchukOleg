@@ -1,0 +1,21 @@
+<div class="container" [attr.data-post_id]="post.id">
+  <div class="row">
+    <div class="col-10">
+      <h3>{{post.title}}</h3>
+    </div>
+    <div class="col-2">
+      <i class="far fa-comment-dots" (click)="showComents()"></i>
+      <i class="fas fa-trash mx-2" (click)="deletePost()"></i>
+      <i class="fas fa-edit" (click)="editPost()"></i>
+      <i class="fas fa-ban" *ngIf="isAditPost" (click)="cancleEditPost()"></i>
+    </div>
+    <div class="row">
+      <p>{{post.body}}</p>
+    </div>
+  </div>
+  <div class="row" *ngFor='let coment of postComents' [hidden]='!comentsViev'>
+    <p>{{coment.id}}</p>
+    <h5>{{coment.name}}</h5>
+    <p>{{coment.body}}</p>
+  </div>
+</div>

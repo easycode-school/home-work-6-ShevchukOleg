@@ -1,0 +1,20 @@
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <form class="mb-2" #mainForm="ngForm" (ngSubmit)="sendForm(mainForm)" >
+        <div class="form-group">
+          <label for="postTitle">Please enter new post title</label>
+          <input type="text" name='title' class="form-control" id="postTitle" placeholder="Title" [ngModel] = 'processingPost.title' required>
+        </div>
+        <div class="form-group">
+          <label for="postText">Your text</label>
+          <textarea class="form-control" name='body' id="postText" rows="2" [ngModel]='processingPost.body' required></textarea>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-primary" type="submit" [disabled]= 'mainForm.invalid'>Отправить</button>
+          <button class="btn btn-dark ml-1" type="button" (click)="cancleEditPost()" [hidden]= '!processingPost.id'>Отмена</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
